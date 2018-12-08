@@ -25,45 +25,66 @@ server with default setting (user 'root' with no password) */
 //echo "Connect Successfully. Host info: " . $conn->host_info;
 //echo "Connect Successfully. Host info: " . mysqli_get_host_info($conn);
 
-//$sql = "CREATE DATABASE IF NOT EXISTS jobschedule";
-/*if(mysqli_query($conn, $sql)){
+$sql = "CREATE DATABASE IF NOT EXISTS jobschedule";
+if(mysqli_query($conn, $sql)){
 	echo "Database created successfully";
 }else{
 	echo "ERROR: Could not execute $sql. " . mysqli_error($conn);
-}*/
+}
 /*if($conn->query($sql) == TRUE){
     echo "Database created successfully";
 } else{
     echo "Error creating database. " . $conn->error;
 }*/
 
-/*$db_selected = mysqli_select_db($conn, "jobschedule");
+$db_selected = mysqli_select_db($conn, "jobschedule");
 if(!$db_selected){
 	die("Can't use jobschedule: " . mysqli_error($conn));
 }
 
-$sql = "CREATE TABLE IF NOT EXISTS jobs(
+$sql = "CREATE TABLE jobs(
 	id_num INT AUTO_INCREMENT,
 	customer_name VARCHAR(30),
-	company VARCHAR(30),
+	status VARCHAR(30),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     company VARCHAR(30),
 	PRIMARY KEY(id_num)
-	)";*/
+	)";
 	
 
-/*if ($conn->query($sql) == TRUE) 
+if ($conn->query($sql) == TRUE) 
 {
 	echo "Table jobs created successfully";
 } 
 else 
 {
 	echo "Error creating table: " . $conn->error;
-}*/
+}
 
 if(isset($_POST["customer_name"]) && isset($_POST["company"])){
 	$customer_name = $_POST["customer_name"];
 	$company = $_POST["company"];
-	
-	$sql = "INSERT INTO jobs (customer_name, company) VALUES ('$customer_name', '$company')";
+	if($_POST["delivered"] == "Delivered")
+	{
+		$status = $_POST["delivered"];
+	}
+	else if($_POST["notdelivered"] == "Not Delivered")
+	{
+		$status= $_POST["notdelivered"];
+	}
+	else if($_POST["willcall"] == "Will Call")
+	{
+		$status= $_POST["willcall"];
+	}
+	else 
+	{
+		$status= $_POST["onhold"];
+	}
+	echo $customer_name, $company, $status;
+	$sql = "INSERT INTO jobs (customer_name, company, status) VALUES ('$customer_name', '$company', '$status')";
+	if(mysqli_query($conn, $sql)){
+	echo "Records added successfully.";
+	}else{
+		echo "ERROR: Could not execute $sql." . mysqli_error($conn);
+	}
 }
 /*if(mysqli_query($conn, $sql)){
 	echo "Records added successfully.";
@@ -71,7 +92,7 @@ if(isset($_POST["customer_name"]) && isset($_POST["company"])){
 	echo "ERROR: Could not execute $sql." . mysqli_error($conn);
 }*/
 
-$sql = "SELECT * FROM jobs";
+/*$sql = "SELECT * FROM jobs";
 if($result = mysqli_query($conn, $sql)){
 	if(mysqli_num_rows($result) > 0){
 		
@@ -100,15 +121,15 @@ if($result = mysqli_query($conn, $sql)){
 }
 	else{
 		echo "ERROR: Could not execute $sql." . mysqli_error($conn);
-	}
+	}*/
 	
-	$sql = "DELETE FROM jobs WHERE customer_name=' '";
+	/*$sql = "DELETE FROM jobs WHERE customer_name='Omer'";
 	if(mysqli_query($conn, $sql)){
 		echo "Records were deleted successfully.";
 	}
 	else{
 		echo "ERROR: Could not execute $sql. " . mysqli_error($conn);
-	}
+	}*/
 	
 // Close connection
 mysqli_close($conn);
